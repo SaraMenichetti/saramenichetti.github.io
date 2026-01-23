@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="calcolatrice.css">
+
+    <script src="calcolatrice2.js"></script>
+
+    <title>Calcolatrice</title>
+
+</head>
+<body>
+    <div class="all">
+        <div class="tasti">
+            <div class="span"><span id="myspan">0</span></div>
+            <input onclick="reset()" type="button" value="CE">
+            <input onclick="addToString('(')" type="button" value="(">
+            <input onclick="addToString(')')" type="button" value=")">
+            <input onclick="addToString('√')" type="button" value="√"><br>
+            <input onclick="addToString('1')" type="button" value="1">
+            <input onclick="addToString('2')" type="button" value="2">
+            <input onclick="addToString('3')" type="button" value="3">
+            <input onclick="addToString('+')" type="button" value="+"><br>
+            <input onclick="addToString('4')" type="button" value="4">
+            <input onclick="addToString('5')" type="button" value="5">
+            <input onclick="addToString('6')" type="button" value="6">
+            <input onclick="addToString('-')" type="button" value="-"><br>
+            <input onclick="addToString('7')" type="button" value="7">
+            <input onclick="addToString('8')" type="button" value="8">
+            <input onclick="addToString('9')" type="button" value="9">
+            <input onclick="addToString('*')" type="button" value="*"><br>
+            <input onclick="addToString('0')" type="button" value="0">
+            <input onclick="addToString('.')" type="button" value=".">
+            <input onclick="enter()" type="button" value="=">
+            <input onclick="addToString('/')" type="button" value="/"><br>
+        </div>
+    </div>
+</body>
+</html>
