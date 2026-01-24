@@ -26,6 +26,10 @@
     
     border-radius: 8px;
 
+    display: grid;
+    grid-template-columns: repeat(4, 44px);
+    gap: 8px;
+
 }
 
 .span {
@@ -39,6 +43,8 @@
 
     overflow: auto;
     white-space: nowrap;
+
+    grid-column: 1 / -1;
 }
 
 input {
