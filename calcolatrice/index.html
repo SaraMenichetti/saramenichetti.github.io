@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
@@ -12,14 +13,23 @@
     <title>Calcolatrice</title>
 
 </head>
+
 <body>
     <div class="all">
-        <div class="tasti">
+        <div class="calculator">
             <div class="span"><span id="myspan">0</span></div>
+            <input onclick="addToString('√')" type="button" value="√" class="scientific">
+            <input onclick="addToString('^')" type="button" value="^" class="scientific">
+            <input onclick="addToString('log(')" type="button" value="log" class="scientific">
+            <input onclick="addToString('e')" type="button" value="e" class="scientific">
+            <input onclick="addToString('sin(')" type="button" value="sin" class="scientific">
+            <input onclick="addToString('cos(')" type="button" value="cos" class="scientific">
+            <input onclick="addToString('tan(')" type="button" value="tan" class="scientific">
+            <input onclick="addToString('π')" type="button" value="π" class="scientific">
             <input onclick="reset()" type="button" value="CE">
             <input onclick="addToString('(')" type="button" value="(">
             <input onclick="addToString(')')" type="button" value=")">
-            <input onclick="addToString('√')" type="button" value="√">
+            <input onclick="back()" type="button" value="←">
             <input onclick="addToString('1')" type="button" value="1">
             <input onclick="addToString('2')" type="button" value="2">
             <input onclick="addToString('3')" type="button" value="3">
@@ -31,12 +41,13 @@
             <input onclick="addToString('7')" type="button" value="7">
             <input onclick="addToString('8')" type="button" value="8">
             <input onclick="addToString('9')" type="button" value="9">
-            <input onclick="addToString('*')" type="button" value="*">
+            <input onclick="addToString('*')" type="button" value="×">
             <input onclick="addToString('0')" type="button" value="0">
             <input onclick="addToString('.')" type="button" value=".">
             <input onclick="enter()" type="button" value="=">
-            <input onclick="addToString('/')" type="button" value="/">
+            <input onclick="addToString('/')" type="button" value=":">
         </div>
     </div>
 </body>
+
 </html>

@@ -32,8 +32,16 @@ function reset() {
     document.getElementById("myspan").textContent = "0";
 }
 
+function back() {
+    let s = document.getElementById("myspan").textContent;
+    if (s.length - 1 == 0)
+        reset();
+    else
+        document.getElementById("myspan").textContent = s.substring(0, s.length - 1);
+}
 
-//classi per i token
+
+// token classes
 
 class Token {
     value;
@@ -54,6 +62,10 @@ class NumericToken extends Token {
                 throw new TokenError("Too many dots");
             }
         }
+        else if (char == 'π' || this.value.includes('π'))
+            throw new TokenError ("Syntax error with π");
+        else if (char == 'e' || this.value.includes('e'))
+            throw new TokenError ("Syntax error with e");
 
         this.value += char;
     }
@@ -61,12 +73,29 @@ class NumericToken extends Token {
 
 class OperatorToken extends Token { ; }
 
+class FunctionToken extends OperatorToken {
+    constructor(value) {
+        super(value);
+    }
+
+    aggregate(char) {
+        this.value += char;
+        for (let i=0; i<this.value.length; i++) {
+            if ("log"[i] != this.value[i] && 
+                "sin"[i] != this.value[i] && 
+                "cos"[i] != this.value[i] && 
+                "tan"[i] != this.value[i])
+                throw new TokenError("Syntax error with functions");
+        }
+    }
+}
+
 class BracketToken extends Token { ; }
 
 class EndToken extends Token { ; }
 
 
-//classi per i nodi
+// node clases
 
 class TreeNode {
     #val;
@@ -98,7 +127,7 @@ class TreeNodeOperator extends TreeNode {
     }
 
     calculate(e1, e2) {
-        throw new Error();
+        throw new Error ("Huh?");
     }
 }
 
@@ -162,6 +191,58 @@ class SqrtTreeNode extends TreeNodeOperator {
     }
 }
 
+class PowerTreeNode extends TreeNodeOperator {
+    constructor(sx, dx) {
+        super('^', sx, dx);
+    }
+
+    calculate(e1, e2) {
+        return Math.pow(e1, e2);
+    }
+}
+
+class LogTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("log", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        return Math.log(e2);
+    }
+}
+
+class SinTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("sin", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        return parseFloat(Math.sin(e2).toFixed(3));
+    }
+}
+
+class CosTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("cos", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        return parseFloat(Math.cos(e2).toFixed(3));
+    }
+}
+
+class TanTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("tan", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        if (parseFloat(Math.cos(e2).toFixed(3)) == 0)
+            throw new ParserError("tan doesn't exist");
+        return parseFloat(Math.tan(e2).toFixed(3));
+    }
+}
+
 class ValTreeNode extends TreeNode {
     constructor(val) {
         super(val, undefined, undefined);
@@ -169,23 +250,23 @@ class ValTreeNode extends TreeNode {
 }
 
 
+// functions
+
 function isNumeric(char) {
-    return "1234567890.".includes(char);
+    return "1234567890πe.".includes(char);
 }
 
 function isOperator(char) {
-    return "+-*/√".includes(char);
+    return "+-*/√^".includes(char);
+}
+
+function isFunction(char) {
+    return "logsincostan".includes(char);
 }
 
 function isBracket(char) {
     return "()".includes(char);
 }
-
-/* 
-Exp ::= Term + Exp | Term - Exp | Term
-Term ::= Factor * Term | Factor / Term | Factor
-Factor ::= n | (Exp)
-*/
 
 function tokenize(s) {
 
@@ -202,6 +283,14 @@ function tokenize(s) {
         }
         else if (isOperator(s[i])) {
             tokens.push(new OperatorToken(s[i]));
+        }
+        else if (isFunction(s[i])) {
+            if (isFunction(s[i - 1])) {
+                tokens[tokens.length - 1].aggregate(s[i]);
+            }
+            else {
+                tokens.push(new FunctionToken(s[i]));
+            }
         }
         else if (isBracket(s[i])) {
             tokens.push(new BracketToken(s[i]));
@@ -254,6 +343,10 @@ function parse(tokens) {
             tokens.shift();
             return new DivideTreeNode(u1, term());;
         }
+        if (head.value == "^") {
+            tokens.shift();
+            return new PowerTreeNode(u1, term());
+        }
         return u1;
     }
 
@@ -268,6 +361,22 @@ function parse(tokens) {
             tokens.shift();
             return new SqrtTreeNode(factor());
         }
+        if (head.value == 'log') {
+            tokens.shift();
+            return new LogTreeNode(factor());
+        }
+        if (head.value == 'sin') {
+            tokens.shift();
+            return new SinTreeNode(factor());
+        }
+        if (head.value == 'cos') {
+            tokens.shift();
+            return new CosTreeNode(factor());
+        }
+        if (head.value == 'tan') {
+            tokens.shift();
+            return new TanTreeNode(factor());
+        }
         return factor();
     }
 
@@ -276,6 +385,10 @@ function parse(tokens) {
 
         if (head instanceof NumericToken) {
             tokens.shift();
+            if (head.value == 'π')
+                return new ValTreeNode(Math.PI);
+            if (head.value == 'e')
+                return new ValTreeNode(Math.E);
             return new ValTreeNode(Number(head.value));
         }
         if (head.value == '(') {

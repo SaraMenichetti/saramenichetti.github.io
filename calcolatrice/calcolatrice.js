@@ -1,3 +1,5 @@
+// This code works only with a basic calculator
+
 let clicks = 0;
 let mem = 0;
 
