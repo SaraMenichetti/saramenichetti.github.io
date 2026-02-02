@@ -1,4 +1,4 @@
-// This code works only with a basic calculator
+// This code works only with the normal calculator and with '√' instead of '←'
 
 let clicks = 0;
 let mem = 0;

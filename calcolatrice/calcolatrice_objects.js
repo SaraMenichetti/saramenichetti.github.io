@@ -40,6 +40,25 @@ function back() {
         document.getElementById("myspan").textContent = s.substring(0, s.length - 1);
 }
 
+function changeCalculator() {
+    let btnId = document.getElementById("change_calc");
+    let scientificBtnsId = document.getElementsByClassName("scientific");
+    if (btnId.innerHTML.trim() === "Normal") {
+        btnId.innerHTML = "Scientific";
+        btnId.value = "Scientific";
+        for (let item of scientificBtnsId) {
+            item.style.setProperty("display", "none", "important");
+        }
+    }
+    else {
+        btnId.innerHTML = "Normal";
+        btnId.value = "Normal";
+        for (let item of scientificBtnsId) {
+            item.style.setProperty("display", "inline-block", "important");
+        }
+    }
+}
+
 
 // token classes
 
@@ -84,13 +103,18 @@ class FunctionToken extends OperatorToken {
             if ("log"[i] != this.value[i] && 
                 "sin"[i] != this.value[i] && 
                 "cos"[i] != this.value[i] && 
-                "tan"[i] != this.value[i])
+                "tan"[i] != this.value[i] &&
+                "rand"[i] != this.value[i] && 
+                "floor"[i] != this.value[i] && 
+                "ceil"[i] != this.value[i])
                 throw new TokenError("Syntax error with functions");
         }
     }
 }
 
 class BracketToken extends Token { ; }
+
+class AbsoluteToken extends Token { ; }
 
 class EndToken extends Token { ; }
 
@@ -136,8 +160,8 @@ class AddTreeNode extends TreeNodeOperator {
         super('+', sx, dx);
     }
 
-    calculate(v1, v2) {
-        return v1 + v2;
+    calculate(e1, e2) {
+        return e1 + e2;
     }
 }
 
@@ -187,6 +211,10 @@ class SqrtTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
+        if (e1)
+            throw new ParserError("Square root error");
+        if (e2 < 0)
+            throw new ParserError ("Number error");
         return Math.sqrt(e2);
     }
 }
@@ -207,6 +235,8 @@ class LogTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
+        if (e1)
+            throw new ParserError("log() error");
         return Math.log(e2);
     }
 }
@@ -217,7 +247,9 @@ class SinTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
-        return parseFloat(Math.sin(e2).toFixed(3));
+        if (e1)
+            throw new ParserError("sin() error");
+        return parseFloat(Math.sin(e2).toFixed(8));
     }
 }
 
@@ -227,7 +259,9 @@ class CosTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
-        return parseFloat(Math.cos(e2).toFixed(3));
+        if (e1)
+            throw new ParserError("cos() error");
+        return parseFloat(Math.cos(e2).toFixed(8));
     }
 }
 
@@ -237,9 +271,59 @@ class TanTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
+        if (e1)
+            throw new ParserError("tan() error");
         if (parseFloat(Math.cos(e2).toFixed(3)) == 0)
             throw new ParserError("tan doesn't exist");
-        return parseFloat(Math.tan(e2).toFixed(3));
+        return parseFloat(Math.tan(e2).toFixed(8));
+    }
+}
+
+class AbsoluteTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("abs", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        if (e1)
+            throw new ParserError("Absolute value error")
+        return Math.abs(e2);
+    }
+}
+
+class RandomTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("rand", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        if (e1 || e2)
+            throw new ParserError("rand() error");
+        return Math.random();
+    }
+}
+
+class FloorTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("floor", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        if (e1) 
+            throw new ParserError("floor() error");
+        return Math.floor(e2);
+    }
+}
+
+class CeilTreeNode extends TreeNodeOperator {
+    constructor(dx) {
+        super("ceil", undefined, dx);
+    }
+
+    calculate(e1, e2) {
+        if (e1) 
+            throw new ParserError("ceil() error");
+        return Math.ceil(e2);
     }
 }
 
@@ -253,7 +337,7 @@ class ValTreeNode extends TreeNode {
 // functions
 
 function isNumeric(char) {
-    return "1234567890πe.".includes(char);
+    return "1234567890π𝑒.".includes(char);
 }
 
 function isOperator(char) {
@@ -261,11 +345,15 @@ function isOperator(char) {
 }
 
 function isFunction(char) {
-    return "logsincostan".includes(char);
+    return "logsincstardfore".includes(char);
 }
 
 function isBracket(char) {
     return "()".includes(char);
+}
+
+function isAbsolute(char) {
+    return "|".includes(char);
 }
 
 function tokenize(s) {
@@ -274,7 +362,7 @@ function tokenize(s) {
 
     for (let i = 0; i < s.length; i++) {
         if (isNumeric(s[i])) {
-            if (isNumeric(s[i - 1])) {
+            if (tokens[tokens.length - 1] instanceof NumericToken) {
                 tokens[tokens.length - 1].aggregate(s[i]);
             }
             else {
@@ -285,7 +373,7 @@ function tokenize(s) {
             tokens.push(new OperatorToken(s[i]));
         }
         else if (isFunction(s[i])) {
-            if (isFunction(s[i - 1])) {
+            if (tokens[tokens.length - 1] instanceof FunctionToken) {
                 tokens[tokens.length - 1].aggregate(s[i]);
             }
             else {
@@ -294,6 +382,9 @@ function tokenize(s) {
         }
         else if (isBracket(s[i])) {
             tokens.push(new BracketToken(s[i]));
+        }
+        else if (isAbsolute(s[i])) {
+            tokens.push(new AbsoluteToken(s[i]));
         }
         else {
             throw new TokenError("Invalid symbol " + s[i]);
@@ -377,6 +468,14 @@ function parse(tokens) {
             tokens.shift();
             return new TanTreeNode(factor());
         }
+        if (head.value == 'floor') {
+            tokens.shift();
+            return new FloorTreeNode(factor());
+        }
+        if (head.value == 'ceil') {
+            tokens.shift();
+            return new CeilTreeNode(factor());
+        }
         return factor();
     }
 
@@ -387,9 +486,13 @@ function parse(tokens) {
             tokens.shift();
             if (head.value == 'π')
                 return new ValTreeNode(Math.PI);
-            if (head.value == 'e')
+            if (head.value == '𝑒')
                 return new ValTreeNode(Math.E);
             return new ValTreeNode(Number(head.value));
+        }
+        if (head.value == 'rand') {
+            tokens.shift();
+            return new RandomTreeNode(factor());
         }
         if (head.value == '(') {
             tokens.shift();
@@ -401,10 +504,21 @@ function parse(tokens) {
             }
             else {
                 throw new ParserError("Right bracket error");
-                return;
             }
         }
-        throw new ParserError("Number or left bracket error");
+        if (head.value == '|') {
+            tokens.shift();
+            let e = exp();
+            head = tokens[0];
+            if (head.value == '|') {
+                tokens.shift();
+                return new AbsoluteTreeNode(e);
+            }
+            else {
+                throw new ParserError("Right absolute error");
+            }
+        }
+        throw new ParserError("Number, left bracket or left absolute error");
     }
 
     return exp();

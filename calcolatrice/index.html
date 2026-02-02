@@ -15,17 +15,22 @@
 </head>
 
 <body>
+    <input id="change_calc" onclick="changeCalculator()" type="button" value="Normal" class="change_calculator">
     <div class="all">
         <div class="calculator">
             <div class="span"><span id="myspan">0</span></div>
-            <input onclick="addToString('√')" type="button" value="√" class="scientific">
+            <input onclick="addToString('√(')" type="button" value="√" class="scientific">
             <input onclick="addToString('^')" type="button" value="^" class="scientific">
             <input onclick="addToString('log(')" type="button" value="log" class="scientific">
-            <input onclick="addToString('e')" type="button" value="e" class="scientific">
+            <input onclick="addToString('𝑒')" type="button" value="𝑒" class="scientific">
             <input onclick="addToString('sin(')" type="button" value="sin" class="scientific">
             <input onclick="addToString('cos(')" type="button" value="cos" class="scientific">
             <input onclick="addToString('tan(')" type="button" value="tan" class="scientific">
             <input onclick="addToString('π')" type="button" value="π" class="scientific">
+            <input onclick="addToString('|')" type="button" value="|" class="scientific">
+            <input onclick="addToString('rand')" type="button" value="rand" class="scientific">
+            <input onclick="addToString('floor(')" type="button" value="floor" class="scientific">
+            <input onclick="addToString('ceil(')" type="button" value="ceil" class="scientific">
             <input onclick="reset()" type="button" value="CE">
             <input onclick="addToString('(')" type="button" value="(">
             <input onclick="addToString(')')" type="button" value=")">
