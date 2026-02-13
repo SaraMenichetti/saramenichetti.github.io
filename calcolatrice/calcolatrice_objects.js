@@ -191,6 +191,8 @@ class DivideTreeNode extends TreeNodeOperator {
     }
 
     calculate(e1, e2) {
+        if (e2 == 0)
+            throw new ParserError("Math error");
         return e1 / e2;
     }
 }
