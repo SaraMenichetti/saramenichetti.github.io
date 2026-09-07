@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="calcolatrice.css">
 
-    <script src="calcolatrice_objects.js"></script>
+    <script type="module" src="calcolatrice_objects.js"></script>
 
     <title>Calcolatrice</title>
 
@@ -18,39 +18,39 @@
     <input id="change_calc" onclick="changeCalculator()" type="button" value="Normal" class="change_calculator">
     <div class="all">
         <div class="calculator">
-            <div class="span"><span id="myspan">0</span></div>
-            <input onclick="addToString('√(')" type="button" value="√" class="scientific">
-            <input onclick="addToString('^')" type="button" value="^" class="scientific">
-            <input onclick="addToString('log(')" type="button" value="log" class="scientific">
-            <input onclick="addToString('𝑒')" type="button" value="𝑒" class="scientific">
-            <input onclick="addToString('sin(')" type="button" value="sin" class="scientific">
-            <input onclick="addToString('cos(')" type="button" value="cos" class="scientific">
-            <input onclick="addToString('tan(')" type="button" value="tan" class="scientific">
-            <input onclick="addToString('π')" type="button" value="π" class="scientific">
-            <input onclick="addToString('|')" type="button" value="|" class="scientific">
-            <input onclick="addToString('rand')" type="button" value="rand" class="scientific">
-            <input onclick="addToString('floor(')" type="button" value="floor" class="scientific">
-            <input onclick="addToString('ceil(')" type="button" value="ceil" class="scientific">
-            <input onclick="reset()" type="button" value="CE">
-            <input onclick="addToString('(')" type="button" value="(">
-            <input onclick="addToString(')')" type="button" value=")">
-            <input onclick="back()" type="button" value="←">
-            <input onclick="addToString('1')" type="button" value="1">
-            <input onclick="addToString('2')" type="button" value="2">
-            <input onclick="addToString('3')" type="button" value="3">
-            <input onclick="addToString('+')" type="button" value="+">
-            <input onclick="addToString('4')" type="button" value="4">
-            <input onclick="addToString('5')" type="button" value="5">
-            <input onclick="addToString('6')" type="button" value="6">
-            <input onclick="addToString('-')" type="button" value="-">
-            <input onclick="addToString('7')" type="button" value="7">
-            <input onclick="addToString('8')" type="button" value="8">
-            <input onclick="addToString('9')" type="button" value="9">
-            <input onclick="addToString('*')" type="button" value="×">
-            <input onclick="addToString('0')" type="button" value="0">
-            <input onclick="addToString('.')" type="button" value=".">
-            <input onclick="enter()" type="button" value="=">
-            <input onclick="addToString('/')" type="button" value=":">
+            <div class="span"><span id="span">0</span></div>
+            <input type="button" value="√" class="scientific">
+            <input type="button" value="^" class="scientific">
+            <input type="button" value="log" class="scientific">
+            <input type="button" value="𝑒" class="scientific">
+            <input type="button" value="sin" class="scientific">
+            <input type="button" value="cos" class="scientific">
+            <input type="button" value="tan" class="scientific">
+            <input type="button" value="π" class="scientific">
+            <input type="button" value="|" class="scientific">
+            <input type="button" value="rand" class="scientific">
+            <input type="button" value="floor" class="scientific">
+            <input type="button" value="ceil" class="scientific">
+            <input type="button" value="CE" id="CE">
+            <input type="button" value="(" class="nonScientific">
+            <input type="button" value=")" class="nonScientific">
+            <input type="button" value="←" id="back">
+            <input type="button" value="1" class="nonScientific">
+            <input type="button" value="2" class="nonScientific">
+            <input type="button" value="3" class="nonScientific">
+            <input type="button" value="+" class="nonScientific">
+            <input type="button" value="4" class="nonScientific">
+            <input type="button" value="5" class="nonScientific">
+            <input type="button" value="6" class="nonScientific">
+            <input type="button" value="-" class="nonScientific">
+            <input type="button" value="7" class="nonScientific">
+            <input type="button" value="8" class="nonScientific">
+            <input type="button" value="9" class="nonScientific">
+            <input type="button" value="×" class="nonScientific">
+            <input type="button" value="0" class="nonScientific">
+            <input type="button" value="." class="nonScientific">
+            <input type="button" value="=" id="enter">
+            <input type="button" value=":" class="nonScientific">
         </div>
     </div>
 </body>

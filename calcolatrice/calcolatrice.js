@@ -6,27 +6,27 @@ let mem = 0;
 function addToString(v) {
 
     if (clicks == 0 && v != "+" && v != "*" && v != "/") {
-        document.getElementById("myspan").textContent=v;
+        document.getElementById("span").textContent=v;
     }
     else
-        document.getElementById("myspan").textContent+=v;
+        document.getElementById("span").textContent+=v;
     clicks++;
 }
 
 function enter() {
-    let s = document.getElementById("myspan").textContent;
-    document.getElementById("myspan").textContent=evaluate(s);
+    let s = document.getElementById("span").textContent;
+    document.getElementById("span").textContent=evaluate(s);
     clicks = 0;
 }
 
 function memory() {
-    let s = document.getElementById("myspan").textContent;
-    mem = document.getElementById("myspan").textContent=evaluate(s);
+    let s = document.getElementById("span").textContent;
+    mem = document.getElementById("span").textContent=evaluate(s);
 }
 
 function reset() {
     clicks = 0;
-    document.getElementById("myspan").textContent=0;
+    document.getElementById("span").textContent=0;
 }
 
 /* 
